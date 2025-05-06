@@ -1,4 +1,4 @@
-﻿{
+{
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
@@ -6,10 +6,10 @@
 	"Description": "For each loop, but for maps.",
 	"Category": "Blueprints",
 	"CreatedBy": "MajorT",
-	"CreatedByURL": "",
+	"CreatedByURL": "https://github.com/MajorTomAW",
 	"DocsURL": "",
 	"MarketplaceURL": "",
-	"CanContainContent": true,
+	"CanContainContent": false,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
@@ -19,5 +19,6 @@
 			"Type": "UncookedOnly",
 			"LoadingPhase": "Default"
 		}
-	]
+	],
+	"SupportURL": ""
 }
