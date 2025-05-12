@@ -245,19 +245,40 @@ FSlateIcon UK2Node_ForEachMap::GetIconAndTint(FLinearColor& OutColor) const
 
 void UK2Node_ForEachMap::PinConnectionListChanged(UEdGraphPin* Pin)
 {
-	Super::PinConnectionListChanged( Pin );
+	Super::PinConnectionListChanged(Pin);
 
 	if (Pin == nullptr)
+	{
 		return;
+	}
+
+	if (Pin->PinName == ForEachMap_PinNames::KeyPin ||
+		Pin->PinName == ForEachMap_PinNames::ValuePin)
+	{
+		UEdGraphPin* ValuePin = GetValuePin();
+		UEdGraphPin* KeyPin = GetKeyPin();
+		UEdGraphPin* MapPin = GetInputMapPin();
+
+		// If we're connected to nothing, reset all those pin types
+		if ( (ValuePin->LinkedTo.Num() + KeyPin->LinkedTo.Num() + MapPin->LinkedTo.Num()) <= 0)
+		{
+			MapPin->PinType = CachedInputWildcardType;
+			KeyPin->PinType = ValuePin->PinType = CachedWildcardType;
+		}
+	}
 
 	if (Pin->PinName == ForEachMap_PinNames::MapPin)
 	{
-		UEdGraphPin* ValuePin = GetValuePin( );
-		UEdGraphPin* KeyPin = GetKeyPin( );
+		UEdGraphPin* ValuePin = GetValuePin();
+		UEdGraphPin* KeyPin = GetKeyPin();
 
+		bool bShouldReconnect = false;
 		if (Pin->LinkedTo.Num() > 0)
 		{
 			const UEdGraphPin* FirstPin = Pin->LinkedTo[0];
+
+			// Only reconnect if the pin type has actually changed
+			bShouldReconnect = Pin->PinType != FirstPin->PinType;
 
 			Pin->PinType = FirstPin->PinType;
 			KeyPin->PinType = FEdGraphPinType::GetTerminalTypeForContainer(FirstPin->PinType);
@@ -265,8 +286,13 @@ void UK2Node_ForEachMap::PinConnectionListChanged(UEdGraphPin* Pin)
 		}
 		else
 		{
-			Pin->PinType = CachedInputWildcardType;
-			KeyPin->PinType = ValuePin->PinType = CachedWildcardType;
+			// If we have no connections anymore, reset pin types
+			if (ValuePin->LinkedTo.Num() + KeyPin->LinkedTo.Num() <= 0)
+			{
+				Pin->PinType = CachedInputWildcardType;
+				KeyPin->PinType = ValuePin->PinType = CachedWildcardType;
+				bShouldReconnect = true;
+			}
 		}
 
 		CachedInputType = Pin->PinType;
@@ -288,8 +314,11 @@ void UK2Node_ForEachMap::PinConnectionListChanged(UEdGraphPin* Pin)
 			FBlueprintEditorUtils::MarkBlueprintAsModified(GetBlueprint());
 		};
 
-		ReconnectPins(KeyPin);
-		ReconnectPins(ValuePin);
+		if (bShouldReconnect)
+		{
+			ReconnectPins(KeyPin);
+			ReconnectPins(ValuePin);	
+		}
 	}
 }
 
