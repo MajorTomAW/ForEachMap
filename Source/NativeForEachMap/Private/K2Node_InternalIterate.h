@@ -14,13 +14,13 @@ class UK2Node_InternalIterate : public UK2Node
 
 public:
 	// Pin Accessors
-	UEdGraphPin* GetArrayPin( void ) const;
-	UEdGraphPin* GetBreakPin( void ) const;
+	UEdGraphPin* GetArrayPin() const;
+	UEdGraphPin* GetBreakPin() const;
 
-	UEdGraphPin* GetForEachPin( void ) const;
-	UEdGraphPin* GetElementPin( void ) const;
-	UEdGraphPin* GetArrayIndexPin( void ) const;
-	UEdGraphPin* GetCompletedPin( void ) const;
+	UEdGraphPin* GetForEachPin() const;
+	UEdGraphPin* GetElementPin() const;
+	UEdGraphPin* GetArrayIndexPin() const;
+	UEdGraphPin* GetCompletedPin() const;
 
 	// K2Node API
 	virtual bool IsNodeSafeToIgnore( ) const override { return true; }

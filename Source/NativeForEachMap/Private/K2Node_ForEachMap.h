@@ -40,6 +40,7 @@ public:
 	UEdGraphPin* GetKeyPin() const;
 	UEdGraphPin* GetValuePin() const;
 	UEdGraphPin* GetCompletePin() const;
+	UEdGraphPin* GetIndexPin() const;
 
 protected:
 	/** Performs a generalized CheckForErrors lookup. */

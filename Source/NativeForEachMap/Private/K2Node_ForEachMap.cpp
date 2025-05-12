@@ -20,6 +20,7 @@ namespace PinNames
 	static const FName KeyPin(TEXT("KeyPin"));
 	static const FName ValuePin(TEXT("ValuePin"));
 	static const FName CompletePin(TEXT("CompletePin"));
+	static const FName IndexPin(TEXT("IndexPin"));
 }
 
 UK2Node_ForEachMap::UK2Node_ForEachMap()
@@ -104,6 +105,14 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 		ValuePin->PinFriendlyName = LOCTEXT("ValuePin_FriendlyName", "Map Value");
 	}
 
+	// OUTPUT: Index
+	UEdGraphPin* IndexPin =
+		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Int, PinNames::IndexPin);
+	if (ensure(IndexPin))
+	{
+		IndexPin->PinFriendlyName = LOCTEXT("IndexPin_FriendlyName", "Map Index");
+	}
+
 	// OUTPUT: Completed Exec
 	UEdGraphPin* CompletedPin =
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Exec, PinNames::CompletePin);
@@ -129,11 +138,6 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 		bAutoAssignPins = true; // We've assigned the pins, so next time we load auto assign them
 	}
-
-	if (AdvancedPinDisplay == ENodeAdvancedPins::NoPins)
-	{
-		AdvancedPinDisplay = ENodeAdvancedPins::Hidden;
-	}
 }
 
 void UK2Node_ForEachMap::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
@@ -155,6 +159,7 @@ void UK2Node_ForEachMap::ExpandNode(FKismetCompilerContext& CompilerContext, UEd
 	UEdGraphPin* ForEach_Key = GetKeyPin();
 	UEdGraphPin* ForEach_Value = GetValuePin();
 	UEdGraphPin* ForEach_Completed = GetCompletePin();
+	UEdGraphPin* ForEach_Index = GetIndexPin();
 
 	
 	// Create the getter node
@@ -179,6 +184,7 @@ void UK2Node_ForEachMap::ExpandNode(FKismetCompilerContext& CompilerContext, UEd
 
 	UEdGraphPin* Internal_Exec = InternalIterate->GetExecPin();
 	UEdGraphPin* Internal_Array = InternalIterate->GetArrayPin();
+	UEdGraphPin* Internal_Index = InternalIterate->GetArrayIndexPin();
 	UEdGraphPin* Internal_Break = InternalIterate->GetBreakPin();
 	UEdGraphPin* Internal_ForEach = InternalIterate->GetForEachPin();
 	UEdGraphPin* Internal_Element = InternalIterate->GetElementPin();
@@ -194,6 +200,7 @@ void UK2Node_ForEachMap::ExpandNode(FKismetCompilerContext& CompilerContext, UEd
 
 	// For each element is the key, wire up directly
 	CompilerContext.MovePinLinksToIntermediate( *ForEach_Key, *Internal_Element);
+	CompilerContext.MovePinLinksToIntermediate(*ForEach_Index, *Internal_Index);
 
 	// Create the find node
 	UK2Node_CallFunction* CallFunc_Find = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
@@ -332,6 +339,11 @@ UEdGraphPin* UK2Node_ForEachMap::GetValuePin() const
 UEdGraphPin* UK2Node_ForEachMap::GetCompletePin() const
 {
 	return FindPinChecked(PinNames::CompletePin);
+}
+
+UEdGraphPin* UK2Node_ForEachMap::GetIndexPin() const
+{
+	return FindPinChecked(PinNames::IndexPin);
 }
 
 bool UK2Node_ForEachMap::CheckForErrors(const FKismetCompilerContext& CompilerContext)
