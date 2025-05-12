@@ -107,7 +107,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// OUTPUT: Index
 	UEdGraphPin* IndexPin =
-		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Int, PinNames::IndexPin);
+		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Int, ForEachMap_PinNames::IndexPin);
 	if (ensure(IndexPin))
 	{
 		IndexPin->PinFriendlyName = LOCTEXT("IndexPin_FriendlyName", "Map Index");
@@ -343,7 +343,7 @@ UEdGraphPin* UK2Node_ForEachMap::GetCompletePin() const
 
 UEdGraphPin* UK2Node_ForEachMap::GetIndexPin() const
 {
-	return FindPinChecked(PinNames::IndexPin);
+	return FindPinChecked(ForEachMap_PinNames::IndexPin);
 }
 
 bool UK2Node_ForEachMap::CheckForErrors(const FKismetCompilerContext& CompilerContext)
