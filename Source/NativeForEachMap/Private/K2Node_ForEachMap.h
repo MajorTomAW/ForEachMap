@@ -58,7 +58,7 @@ protected:
 	UPROPERTY()
 	FEdGraphPinType CachedValueType;
 
-	/** Whether we want to auto-assign pins (for example, due to copy&paste) */
+	/** Whether we want to auto-assign pins (for example, when reopening the unreal editor) */
 	UPROPERTY()
 	bool bAutoAssignPins = false;
 };

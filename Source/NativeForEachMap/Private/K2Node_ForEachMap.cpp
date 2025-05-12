@@ -13,7 +13,7 @@
 
 #define LOCTEXT_NAMESPACE "K2Node_ForEachMap"
 
-namespace PinNames
+namespace ForEachMap_PinNames
 {
 	static const FName MapPin(TEXT("MapPin"));
 	static const FName BreakPin(TEXT("BreakPin"));
@@ -65,7 +65,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// INPUT: Map Type
 	UEdGraphPin* MapPin =
-		CreatePin( EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, PinNames::MapPin, _params);
+		CreatePin( EGPD_Input, UEdGraphSchema_K2::PC_Wildcard, ForEachMap_PinNames::MapPin, _params);
 	if (ensure(MapPin))
 	{
 		MapPin->PinType.bIsConst = true;
@@ -75,7 +75,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// INPUT: Break pin
 	UEdGraphPin* BreakPin =
-		CreatePin( EGPD_Input, UEdGraphSchema_K2::PC_Exec, PinNames::BreakPin);
+		CreatePin( EGPD_Input, UEdGraphSchema_K2::PC_Exec, ForEachMap_PinNames::BreakPin);
 	if (ensure(BreakPin))
 	{
 		BreakPin->PinFriendlyName = LOCTEXT( "BreakPin_FriendlyName", "Break" );
@@ -91,7 +91,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// OUTPUT: Key
 	UEdGraphPin* KeyPin =
-		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, PinNames::KeyPin);
+		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, ForEachMap_PinNames::KeyPin);
 	if (ensure(KeyPin))
 	{
 		KeyPin->PinFriendlyName = LOCTEXT("KeyPin_FriendlyName", "Map Key");	
@@ -99,7 +99,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// OUTPUT: Value
 	UEdGraphPin* ValuePin =
-		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, PinNames::ValuePin);
+		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, ForEachMap_PinNames::ValuePin);
 	if (ensure(ValuePin))
 	{
 		ValuePin->PinFriendlyName = LOCTEXT("ValuePin_FriendlyName", "Map Value");
@@ -115,7 +115,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 
 	// OUTPUT: Completed Exec
 	UEdGraphPin* CompletedPin =
-		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Exec, PinNames::CompletePin);
+		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Exec, ForEachMap_PinNames::CompletePin);
 	if (ensure(CompletedPin))
 	{
 		CompletedPin->PinFriendlyName = LOCTEXT( "CompletedPin_FriendlyName", "Completed" );
@@ -250,7 +250,7 @@ void UK2Node_ForEachMap::PinConnectionListChanged(UEdGraphPin* Pin)
 	if (Pin == nullptr)
 		return;
 
-	if (Pin->PinName == PinNames::MapPin)
+	if (Pin->PinName == ForEachMap_PinNames::MapPin)
 	{
 		UEdGraphPin* ValuePin = GetValuePin( );
 		UEdGraphPin* KeyPin = GetKeyPin( );
@@ -313,12 +313,12 @@ void UK2Node_ForEachMap::PostPasteNode()
 
 UEdGraphPin* UK2Node_ForEachMap::GetInputMapPin() const
 {
-	return FindPinChecked(PinNames::MapPin);
+	return FindPinChecked(ForEachMap_PinNames::MapPin);
 }
 
 UEdGraphPin* UK2Node_ForEachMap::GetInputBreakPin() const
 {
-	return FindPinChecked(PinNames::BreakPin);
+	return FindPinChecked(ForEachMap_PinNames::BreakPin);
 }
 
 UEdGraphPin* UK2Node_ForEachMap::GetLoopBodyPin() const
@@ -328,17 +328,17 @@ UEdGraphPin* UK2Node_ForEachMap::GetLoopBodyPin() const
 
 UEdGraphPin* UK2Node_ForEachMap::GetKeyPin() const
 {
-	return FindPinChecked(PinNames::KeyPin);
+	return FindPinChecked(ForEachMap_PinNames::KeyPin);
 }
 
 UEdGraphPin* UK2Node_ForEachMap::GetValuePin() const
 {
-	return FindPinChecked(PinNames::ValuePin);
+	return FindPinChecked(ForEachMap_PinNames::ValuePin);
 }
 
 UEdGraphPin* UK2Node_ForEachMap::GetCompletePin() const
 {
-	return FindPinChecked(PinNames::CompletePin);
+	return FindPinChecked(ForEachMap_PinNames::CompletePin);
 }
 
 UEdGraphPin* UK2Node_ForEachMap::GetIndexPin() const
