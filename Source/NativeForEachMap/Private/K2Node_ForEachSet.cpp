@@ -28,6 +28,8 @@ namespace ForEachSet_PinNames
 
 UK2Node_ForEachSet::UK2Node_ForEachSet()
 {
+	ValueName = LOCTEXT("ValuePin_FriendlyName", "Map Value").ToString();
+	IndexName = LOCTEXT("IndexPin_FriendlyName", "Map Index").ToString();
 }
 
 void UK2Node_ForEachSet::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
@@ -97,7 +99,7 @@ void UK2Node_ForEachSet::AllocateDefaultPins()
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, ForEachSet_PinNames::ValuePin);
 	if (ensure(ValuePin))
 	{
-		ValuePin->PinFriendlyName = LOCTEXT("ValuePin_FriendlyName", "Set Value");
+		ValuePin->PinFriendlyName = FText::FromString(ValueName);
 	}
 
 	// OUTPUT: Index
@@ -105,7 +107,7 @@ void UK2Node_ForEachSet::AllocateDefaultPins()
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Int, ForEachSet_PinNames::IndexPin);
 	if (ensure(IndexPin))
 	{
-		IndexPin->PinFriendlyName = LOCTEXT("IndexPin_FriendlyName", "Set Index");
+		IndexPin->PinFriendlyName = FText::FromString(IndexName);
 	}
 
 	// OUTPUT: Completed Exec
@@ -311,6 +313,31 @@ void UK2Node_ForEachSet::PostPasteNode()
 	else
 	{
 		bAutoAssignPins = false;
+	}
+}
+
+void UK2Node_ForEachSet::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	bool bRefresh = false;
+
+	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, ValueName))
+	{
+		GetValuePin()->PinFriendlyName = FText::FromString(ValueName);
+		bRefresh = true;
+	}
+	else if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, IndexName))
+	{
+		GetIndexPin()->PinFriendlyName = FText::FromString(IndexName);
+		bRefresh = true;
+	}
+
+	if (bRefresh)
+	{
+		// Poke the graph to update the visuals based on the above changes
+		GetGraph()->NotifyGraphChanged();
+		FBlueprintEditorUtils::MarkBlueprintAsModified(GetBlueprint());
 	}
 }
 

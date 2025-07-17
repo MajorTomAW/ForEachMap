@@ -7,7 +7,7 @@
 #include "K2Node_ForEachSet.generated.h"
 
 /** Even dumber node for a for-each loop over a set */
-UCLASS()
+UCLASS(CollapseCategories)
 class NATIVEFOREACHMAP_API UK2Node_ForEachSet : public UK2Node
 {
 	GENERATED_BODY()
@@ -34,13 +34,17 @@ public:
 	virtual void PostPasteNode() override;
 	//~ End UEdGraphNode Interface
 
+	//~ Begin UObject Interface
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+	//~ End UObject Interface
+
 	/** Pin Accessors */
-	UEdGraphPin* GetInputSetPin() const;
-	UEdGraphPin* GetInputBreakPin() const;
-	UEdGraphPin* GetLoopBodyPin() const;
-	UEdGraphPin* GetValuePin() const;
-	UEdGraphPin* GetCompletePin() const;
-	UEdGraphPin* GetIndexPin() const;
+	[[nodiscard]] UEdGraphPin* GetInputSetPin() const;
+	[[nodiscard]] UEdGraphPin* GetInputBreakPin() const;
+	[[nodiscard]] UEdGraphPin* GetLoopBodyPin() const;
+	[[nodiscard]] UEdGraphPin* GetValuePin() const;
+	[[nodiscard]] UEdGraphPin* GetCompletePin() const;
+	[[nodiscard]] UEdGraphPin* GetIndexPin() const;
 
 protected:
 	/** Performs a generalized CheckForErrors lookup. */
@@ -59,4 +63,13 @@ protected:
 	/** Whether we want to auto-assign pins (for example, when reopening the unreal editor) */
 	UPROPERTY()
 	bool bAutoAssignPins = false;
+
+private:
+	/** A user-editable hook for the display name of the value pin */
+	UPROPERTY(EditDefaultsOnly, Category = ForEachSet)
+	FString ValueName;
+
+	/** A user-editable hook for the display name of the index pin */
+	UPROPERTY(EditDefaultsOnly, Category = ForEachSet)
+	FString IndexName;
 };

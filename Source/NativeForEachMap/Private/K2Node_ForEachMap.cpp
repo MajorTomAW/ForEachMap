@@ -27,6 +27,9 @@ namespace ForEachMap_PinNames
 
 UK2Node_ForEachMap::UK2Node_ForEachMap()
 {
+	KeyName = LOCTEXT("KeyPin_FriendlyName", "Map Key").ToString();
+	ValueName = LOCTEXT("ValuePin_FriendlyName", "Map Value").ToString();
+	IndexName = LOCTEXT("IndexPin_FriendlyName", "Map Index").ToString();
 }
 
 void UK2Node_ForEachMap::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
@@ -96,7 +99,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, ForEachMap_PinNames::KeyPin);
 	if (ensure(KeyPin))
 	{
-		KeyPin->PinFriendlyName = LOCTEXT("KeyPin_FriendlyName", "Map Key");	
+		KeyPin->PinFriendlyName = FText::FromString(KeyName);	
 	}
 
 	// OUTPUT: Value
@@ -104,7 +107,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, ForEachMap_PinNames::ValuePin);
 	if (ensure(ValuePin))
 	{
-		ValuePin->PinFriendlyName = LOCTEXT("ValuePin_FriendlyName", "Map Value");
+		ValuePin->PinFriendlyName = FText::FromString(ValueName);
 	}
 
 	// OUTPUT: Index
@@ -112,7 +115,7 @@ void UK2Node_ForEachMap::AllocateDefaultPins()
 		CreatePin( EGPD_Output, UEdGraphSchema_K2::PC_Int, ForEachMap_PinNames::IndexPin);
 	if (ensure(IndexPin))
 	{
-		IndexPin->PinFriendlyName = LOCTEXT("IndexPin_FriendlyName", "Map Index");
+		IndexPin->PinFriendlyName = FText::FromString(IndexName);
 	}
 
 	// OUTPUT: Completed Exec
@@ -344,6 +347,36 @@ void UK2Node_ForEachMap::PostPasteNode()
 	else
 	{
 		bAutoAssignPins = false;
+	}
+}
+
+void UK2Node_ForEachMap::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	bool bRefresh = false;
+
+	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, KeyName))
+	{
+		GetKeyPin()->PinFriendlyName = FText::FromString(KeyName);
+		bRefresh = true;
+	}
+	else if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, ValueName))
+	{
+		GetValuePin()->PinFriendlyName = FText::FromString(ValueName);
+		bRefresh = true;
+	}
+	else if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass, IndexName))
+	{
+		GetIndexPin()->PinFriendlyName = FText::FromString(IndexName);
+		bRefresh = true;
+	}
+
+	if (bRefresh)
+	{
+		// Poke the graph to update the visuals based on the above changes
+		GetGraph()->NotifyGraphChanged();
+		FBlueprintEditorUtils::MarkBlueprintAsModified(GetBlueprint());
 	}
 }
 
