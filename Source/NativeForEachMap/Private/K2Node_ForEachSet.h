@@ -1,20 +1,20 @@
-// Author: Tom Werner (MajorT), 2025
+﻿// Author: Tom Werner (MajorT), 2025
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "K2Node.h"
-#include "K2Node_ForEachMap.generated.h"
+#include "K2Node_ForEachSet.generated.h"
 
-/** Dumb node for a for-each loop over a map */
+/** Even dumber node for a for-each loop over a set */
 UCLASS()
-class NATIVEFOREACHMAP_API UK2Node_ForEachMap : public UK2Node
+class NATIVEFOREACHMAP_API UK2Node_ForEachSet : public UK2Node
 {
 	GENERATED_BODY()
-	
+
 public:
-	UK2Node_ForEachMap();
-	
+	UK2Node_ForEachSet();
+
 	//~ Begin UK2Node Interface
 	virtual bool IsNodeSafeToIgnore() const override { return true; }
 	virtual void GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const override;
@@ -35,10 +35,9 @@ public:
 	//~ End UEdGraphNode Interface
 
 	/** Pin Accessors */
-	UEdGraphPin* GetInputMapPin() const;
+	UEdGraphPin* GetInputSetPin() const;
 	UEdGraphPin* GetInputBreakPin() const;
 	UEdGraphPin* GetLoopBodyPin() const;
-	UEdGraphPin* GetKeyPin() const;
 	UEdGraphPin* GetValuePin() const;
 	UEdGraphPin* GetCompletePin() const;
 	UEdGraphPin* GetIndexPin() const;
@@ -54,8 +53,6 @@ protected:
 	FEdGraphPinType CachedWildcardType;
 	UPROPERTY()
 	FEdGraphPinType CachedInputType;
-	UPROPERTY()
-	FEdGraphPinType CachedKeyType;
 	UPROPERTY()
 	FEdGraphPinType CachedValueType;
 

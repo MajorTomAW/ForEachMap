@@ -1,4 +1,4 @@
-// Copyright © 2025 MajorT. All Rights Reserved.
+// Author: Tom Werner (MajorT), 2025
 
 
 #include "K2Node_ForEachMap.h"
@@ -10,6 +10,8 @@
 #include "KismetCompiler.h"
 #include "Kismet/BlueprintMapLibrary.h"
 #include "Kismet2/BlueprintEditorUtils.h"
+
+#include UE_INLINE_GENERATED_CPP_BY_NAME(K2Node_ForEachMap)
 
 #define LOCTEXT_NAMESPACE "K2Node_ForEachMap"
 
@@ -240,7 +242,13 @@ FText UK2Node_ForEachMap::GetKeywords() const
 FSlateIcon UK2Node_ForEachMap::GetIconAndTint(FLinearColor& OutColor) const
 {
 	static const FSlateIcon Icon = FSlateIcon(FAppStyle::GetAppStyleSetName(), "GraphEditor.Macro.ForEach_16x");
+	OutColor = FLinearColor::White;
 	return Icon;
+}
+
+FLinearColor UK2Node_ForEachMap::GetNodeTitleColor() const
+{
+	return FLinearColor::White;
 }
 
 void UK2Node_ForEachMap::PinConnectionListChanged(UEdGraphPin* Pin)
