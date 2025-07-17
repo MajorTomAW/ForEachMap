@@ -6,7 +6,7 @@ The ForEach loop that supports maps.
 ## V1.2 & 1.3
 Added "For Each Set" and changed the style of the nodes.  
 ![image](https://github.com/user-attachments/assets/491e8dd9-b42d-4a54-9c05-c71d1eea1f8a)  
-Renaming Pins through details panel when node selected.   
+Renaming Pins through details panel when node selected. _(ignore the visual stye changes, it's from ElectronicNodes and CrystalNodes)_  
 ![Image](https://github.com/user-attachments/assets/b866c31d-a5ab-4225-a4b1-7b07a51cffd5)
 
 
