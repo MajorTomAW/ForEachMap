@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.0",
+	"VersionName": "1.3",
 	"FriendlyName": "Native For Each Map",
 	"Description": "For each loop, but for maps.",
 	"Category": "Blueprints",
