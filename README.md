@@ -3,7 +3,7 @@ Plugin that contains literally just one single node.
 The ForEach loop that supports maps.  
 🎉 Yey.. 
 
-## V1.2 % 1.3
+## V1.2 & 1.3
 Added "For Each Set" and changed the style of the nodes.  
 ![image](https://github.com/user-attachments/assets/491e8dd9-b42d-4a54-9c05-c71d1eea1f8a)  
 Renaming Pins through details panel when node selected.   
